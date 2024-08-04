@@ -61,3 +61,26 @@ function getUserByUserName($conn, $userName){
 
     return $user;
 }
+
+
+// New function to get users by branch ID
+function getUsersByBranch($conn, $branchId) {
+    $sql = "SELECT username FROM user WHERE branch_id = ?";
+    $stmt = mysqli_stmt_init($conn);
+
+    if(!mysqli_stmt_prepare($stmt, $sql)){
+        header("Location: ../views/index.php?error=stmtError");
+        exit();
+    }
+
+    mysqli_stmt_bind_param($stmt, "i", $branchId);
+    mysqli_stmt_execute($stmt);
+    
+    $resultData = mysqli_stmt_get_result($stmt);
+    $usernames = mysqli_fetch_all($resultData, MYSQLI_ASSOC);   
+    mysqli_stmt_close($stmt);
+
+    return array_map(function($user) {
+        return $user['username'];
+    }, $usernames);
+}

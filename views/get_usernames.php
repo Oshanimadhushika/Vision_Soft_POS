@@ -1,18 +1,18 @@
 <?php
 // get_usernames.php
 
-require_once "database.php";
+require_once "db.php";
 
 if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["branch"])) {
     $selectedBranch = $_GET["branch"];
     
-    $usernameQuery = "SELECT user_name FROM users WHERE branch = '$selectedBranch'";
+    $usernameQuery = "SELECT username FROM `user` WHERE branch = '$selectedBranch'";
     $usernameResult = $conn->query($usernameQuery);
 
     $usernames = [];
 
     while ($row = $usernameResult->fetch_assoc()) {
-        $usernames[] = $row['user_name'];
+        $usernames[] = $row['username'];
     }
 
     echo json_encode($usernames);
